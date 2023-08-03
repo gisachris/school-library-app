@@ -6,7 +6,7 @@ class Rental
     @book = book
     @person = person
 
-    book.rentals << self
-    person.rentals << self
+    book.rentals_list << self
+    person.rentals_list << self
   end
 end
