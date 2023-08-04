@@ -93,6 +93,13 @@ Clone this repository to your desired folder:
   Run IRB
   Require the necessary files.
 ```
+or
+
+```sh
+  Navigate to the project directory
+  then
+  Run 'ruby main.rb'
+```
 
 ### Run tests
 

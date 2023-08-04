@@ -8,5 +8,15 @@ class Rental
 
     book.rentals_list << self
     person.rentals_list << self
+
+    self.class.add_to_all_rentals(self)
+  end
+
+  def self.all_rentals
+    @all_rentals ||= []
+  end
+
+  def self.add_to_all_rentals(rental)
+    all_rentals << rental
   end
 end
