@@ -89,7 +89,6 @@ def list_rentals_by_id
   end
 end
 
-
 private
 
 def create_student
