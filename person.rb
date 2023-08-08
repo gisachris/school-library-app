@@ -1,7 +1,9 @@
 require_relative 'nameable'
 require_relative 'rentals'
+require_relative 'rental_behaviors'
 
 class Person < Nameable
+  include RentalBehaviors
   attr_accessor :name, :age, :rentals_list
   attr_reader :id
 
@@ -28,7 +30,7 @@ class Person < Nameable
     @age > 18 || @parent_permission
   end
 
-  def rent(date, book)
+  def person_side_renting(date, book)
     ren = Rental.new(date, book, self)
     rentals_list << ren
   end
