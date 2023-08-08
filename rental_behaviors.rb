@@ -1,17 +1,9 @@
-require_relative 'rentals'
+module RentalBehaviors
+  def book_side_renting(date, person)
+    raise NotImplementedError, 'Subclasses must implement this method'
+  end
 
-class Renting
-    attr_reader :date, :book, :person
-    def initialize(date,book,person)
-        @date = date
-        @book = book
-        @person = person
-    end
-
-    def create_rental
-        ren = Rental.new(date, book, person)
-        book.rentals_list << ren
-        person.rentals_list << ren
-        Rental.all_rentals << ren
-    end
+  def person_side_renting(date, book)
+    raise NotImplementedError, 'Subclasses must implement this method'
+  end
 end
