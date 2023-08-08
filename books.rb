@@ -1,6 +1,8 @@
 require_relative 'rentals'
-require_relative 'rental_booking'
+require_relative 'rental_behaviors'
+
 class Book
+  include RentalBehaviors
   attr_accessor :title, :author, :rentals_list
 
   @book_list = []
@@ -16,7 +18,7 @@ class Book
     attr_reader :book_list
   end
 
-  def rent(date, person)
+  def book_side_renting(date, person)
     ren = Rental.new(date, self, person)
     rentals_list << ren
   end
