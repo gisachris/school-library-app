@@ -31,7 +31,7 @@ end
 
 def create_person
   print 'Do you want to create a student(1) or a teacher(2) [input the number]:'
-  p_choice = gets.chomp.to_i
+  p_choice = InputHandler.plain_integer_input
   case p_choice
   when 1
     create_student
@@ -45,11 +45,9 @@ def create_person
 end
 
 def create_book
-  print 'Title:'
-  book_name = gets.chomp.to_s
+  book_name = InputHandler.get_string_input('Title')
 
-  print 'Author:'
-  book_author = gets.chomp.to_s
+  book_author = InputHandler.get_string_input('Author')
 
   Book.new(book_name, book_author)
   puts 'Book created succesfully!'
@@ -58,16 +56,15 @@ end
 def create_rental
   puts 'select a book from the following list by number: '
   list_all_books
-  inputed_book = gets.chomp.to_i
+  inputed_book = InputHandler.plain_integer_input
   selected_book = Book.book_list[inputed_book]
 
   puts 'select a person from the following list by number(not id): '
   list_all_people
-  inputed_person = gets.chomp.to_i
+  inputed_person = InputHandler.plain_integer_input
   selected_person = Person.all_people[inputed_person]
 
-  print 'Date: '
-  rent_date = gets.chomp.to_s
+  rent_date = InputHandler.get_string_input('Date')
 
   Rental.new(rent_date, selected_book, selected_person)
   puts 'Rental created successfully!'
@@ -92,27 +89,21 @@ end
 private
 
 def create_student
-  print 'Age:'
-  student_age = gets.chomp.to_i
+  student_age = InputHandler.get_integer_input('Age')
 
-  print 'name:'
-  student_name = gets.chomp.to_s
+  student_name = InputHandler.get_string_input('Name')
 
-  print 'has parent permission? [Y/N]:'
-  answer = gets.chomp.downcase.to_s
-  student_permission = (answer == 'y')
+  student_permission = InputHandler.get_boolean_input('Has parent permission [Y/N]')
+
   Student.new(student_age, student_name, parent_permission: student_permission)
 end
 
 def create_teacher
-  print 'Age:'
-  teacher_age = gets.chomp.to_i
+  teacher_age = InputHandler.get_integer_input('Age')
 
-  print 'Name:'
-  teacher_name = gets.chomp.to_s
+  teacher_name = InputHandler.get_string_input('Name')
 
-  print 'specialization:'
-  teacher_specialization = gets.chomp.to_s
+  teacher_specialization = InputHandler.get_string_input('specialization')
 
   Teacher.new(teacher_specialization, teacher_age, teacher_name)
 end

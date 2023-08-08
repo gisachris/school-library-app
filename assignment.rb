@@ -1,5 +1,4 @@
 module Assignment
-  #   attr_accessor :classroom_assignment, :student_assignment
   def classroom_assignment(assigned_classroom)
     @classroom = assigned_classroom
     assigned_classroom.students.push(self) unless assigned_classroom.students.include?(self)
