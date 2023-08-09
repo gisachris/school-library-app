@@ -19,4 +19,11 @@ class Rental
   def self.add_to_all_rentals(rental)
     all_rentals << rental
   end
+
+  def to_h_without_related
+    {
+      date: @date
+    }
+  end
+  
 end

@@ -15,8 +15,16 @@ class Book
   end
 
   class << self
-    attr_reader :book_list
+    attr_accessor :book_list
   end
+
+  def to_h
+    {
+      title: @title,
+      author: @author,
+      rentals_list: rentals_list.map { |rental| rental.to_h_without_related }
+    }
+  end  
 
   def book_side_renting(date, person)
     ren = Rental.new(date, self, person)

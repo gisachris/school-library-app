@@ -40,6 +40,16 @@ class Person < Nameable
     @all_people ||= []
   end
 
+  def to_h
+    {
+      id: @id,
+      name: @name,
+      age: @age,
+      parent_permission: @parent_permission,
+      rentals_list: rentals_list.map { |rental| rental.to_h_without_related }
+    }
+  end  
+
   private
 
   def of_age?
