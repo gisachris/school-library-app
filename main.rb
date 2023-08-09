@@ -3,7 +3,7 @@ require_relative 'store'
 require_relative 'person'
 require_relative 'books'
 require_relative 'rentals'
-require_relative 'input_Handler'
+require_relative 'input_handler'
 
 module StartupMessage
   def self.print_once
