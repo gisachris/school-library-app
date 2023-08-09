@@ -58,26 +58,49 @@ class Person < Nameable
   # Load person data
   def self.load_people(data)
     @all_people = data.map do |person_data|
-      id = person_data[:id]
-      name = person_data[:name]
-      age = person_data[:age]
-      parent_permission = person_data[:parent_permission]
-      person = Person.new(age, name, parent_permission: parent_permission)
-      person.instance_variable_set(:@id, id)
+      load_person(person_data)
+    end
+  end
 
-      if person_data[:rentals_list]
-        person_data[:rentals_list].each do |rental_data|
-          date = rental_data[:date]
-          book_data = rental_data[:book]
-          book = Book.book_list.find { |b| b.title == book_data[:title] && b.author == book_data[:author] } if book_data
-          if book
-            Rental.new(date, book, person)
-          else
-            puts "Unable to find book #{book_data[:title]} by #{book_data[:author]} for rental by person #{name} (ID: #{id}). Skipping rental." if book_data
-          end
-        end
-      end
-      person
+  def self.load_person(person_data)
+    id = person_data[:id]
+    name = person_data[:name]
+    age = person_data[:age]
+    parent_permission = person_data[:parent_permission]
+    person = create_person(id, name, age, parent_permission)
+
+    load_rentals(person, person_data[:rentals_list])
+
+    person
+  end
+
+  def self.create_person(id, name, age, parent_permission)
+    person = Person.new(age, name, parent_permission: parent_permission)
+    person.instance_variable_set(:@id, id)
+    person
+  end
+
+  def self.load_rentals(person, rentals_data)
+    rentals_data&.each do |rental_data|
+      load_rental(person, rental_data)
+    end
+  end
+
+  def self.load_rental(person, rental_data)
+    date = rental_data[:date]
+    book_data = rental_data[:book]
+    book = find_book(book_data)
+
+    if book
+      Rental.new(date, book, person)
+    end
+  end
+
+  def self.find_book(book_data)
+    return unless book_data
+
+    Book.book_list.find do |book|
+      book.title == book_data[:title] && book.author == book_data[:author]
     end
   end
 
