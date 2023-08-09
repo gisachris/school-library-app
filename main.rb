@@ -50,7 +50,7 @@ def load_data_from_storage
   Book.load_books(data[1])
   Rental.load_rentals(data[0])
 
-  # Link rentals with people and books after loading
+  # Link rentals with people and books after loading.
   Rental.all_rentals.each do |rental|
     book = Book.book_list.find { |b| b.title == rental.book.title && b.author == rental.book.author }
     person = Person.all_people.find { |p| p.id == rental.person.id }
