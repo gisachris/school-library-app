@@ -22,7 +22,32 @@ class Rental
 
   def to_h_without_related
     {
-      date: @date
+      date: @date,
+      book: {
+        title: @book.title,
+        author: @book.author
+      },
+      person: {
+        id: @person.id
+      }
     }
+  end
+
+  def self.load_rentals(data)
+    @all_rentals = data.map do |rental_data|
+      date = rental_data[:date]
+      book_data = rental_data[:book]
+      person_data = rental_data[:person]
+
+      book = Book.book_list.find { |b| b.title == book_data[:title] && b.author == book_data[:author] } if book_data
+      person = Person.find_by_id(person_data[:id]) if person_data
+
+      if book
+        Rental.new(date, book, person)
+      else
+        puts "Unable to find book #{book_data[:title]} by #{book_data[:author]}. Skipping rental." if book_data
+        nil
+      end
+    end.compact
   end
 end
