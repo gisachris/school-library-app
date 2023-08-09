@@ -22,9 +22,9 @@ class Book
     {
       title: @title,
       author: @author,
-      rentals_list: rentals_list.map { |rental| rental.to_h_without_related }
+      rentals_list: rentals_list.map(&:to_h_without_related)
     }
-  end  
+  end
 
   def book_side_renting(date, person)
     ren = Rental.new(date, self, person)

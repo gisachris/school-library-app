@@ -25,5 +25,4 @@ class Rental
       date: @date
     }
   end
-  
 end
