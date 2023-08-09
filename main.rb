@@ -41,6 +41,25 @@ module StartupMessage
   end
 end
 
+def load_data_from_storage
+  storage = StorageProcedures.new
+  data = storage.read_from_storage
+
+  # Load people, books, and rentals
+  Person.load_people(data[2])
+  Book.load_books(data[1])
+  Rental.load_rentals(data[0])
+
+  # Link rentals with people and books after loading
+  Rental.all_rentals.each do |rental|
+    book = Book.book_list.find { |b| b.title == rental.book.title && b.author == rental.book.author }
+    person = Person.all_people.find { |p| p.id == rental.person.id }
+
+    rental.book = book if book
+    rental.person = person if person
+  end
+end
+
 def main
   StartupMessage.print_once
   puts 'Please choose an option by entering a number:'
@@ -52,6 +71,8 @@ def main
   puts '6 - List all rentals for a given person id'
   puts '7 - Exit'
 end
+
+load_data_from_storage
 
 loop do
   main
