@@ -30,4 +30,27 @@ class Book
     ren = Rental.new(date, self, person)
     rentals_list << ren
   end
+
+  # load and create instances of Book objects along with associated Rental object
+  def self.load_books(data)
+    @book_list = data.map do |book_data|
+      title = book_data[:title]
+      author = book_data[:author]
+      book = Book.new(title, author)
+
+      if book_data[:rentals_list]
+        book_data[:rentals_list].each do |rental_data|
+          date = rental_data[:date]
+          person_data = rental_data[:person]
+          person = Person.find_by_id(person_data[:id]) if person_data
+          if person
+            Rental.new(date, book, person)
+          else
+            puts "Unable to find person with ID #{person_data[:id]} for rental of book #{title} by #{author}. Skipping rental." if person_data
+          end
+        end
+      end
+      book
+    end
+  end
 end
