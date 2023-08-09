@@ -41,7 +41,7 @@ class Book
       book_data[:rentals_list]&.each do |rental_data|
         date = rental_data[:date]
         person_data = rental_data[:person]
-        person = Person.find_by_id(person_data[:id]) if person_data
+        person = Person.find_by_id(person_data&.[](:id))
         if person
           Rental.new(date, book, person)
         elsif person_data
