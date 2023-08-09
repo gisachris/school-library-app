@@ -20,14 +20,6 @@ module InputHandler
     answer = gets.chomp.downcase
     answer == 'y'
   end
-
-  def self.plain_integer_input
-    gets.chomp.to_i
-  end
-
-  def self.plain_string_input
-    gets.chomp.to_s
-  end
 end
 
 module StartupMessage
