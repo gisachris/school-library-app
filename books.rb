@@ -38,16 +38,14 @@ class Book
       author = book_data[:author]
       book = Book.new(title, author)
 
-      if book_data[:rentals_list]
-        book_data[:rentals_list].each do |rental_data|
-          date = rental_data[:date]
-          person_data = rental_data[:person]
-          person = Person.find_by_id(person_data[:id]) if person_data
-          if person
-            Rental.new(date, book, person)
-          else
-            puts "Unable to find person with ID #{person_data[:id]} for rental of book #{title} by #{author}. Skipping rental." if person_data
-          end
+      book_data[:rentals_list]&.each do |rental_data|
+        date = rental_data[:date]
+        person_data = rental_data[:person]
+        person = Person.find_by_id(person_data[:id]) if person_data
+        if person
+          Rental.new(date, book, person)
+        elsif person_data
+          puts "Unable to find rental of book #{title} by #{author}."
         end
       end
       book
