@@ -91,9 +91,9 @@ class Person < Nameable
     book_data = rental_data[:book]
     book = find_book(book_data)
 
-    if book
-      Rental.new(date, book, person)
-    end
+    return unless book
+
+    Rental.new(date, book, person)
   end
 
   def self.find_book(book_data)
