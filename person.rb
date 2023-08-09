@@ -22,6 +22,11 @@ class Person < Nameable
     self.class.all_people << self
   end
 
+  # find a person by ID
+  def self.find_by_id(id)
+    all_people.find { |person| person.id == id }
+  end
+
   def correct_name()
     @name
   end
@@ -48,6 +53,32 @@ class Person < Nameable
       parent_permission: @parent_permission,
       rentals_list: rentals_list.map(&:to_h_without_related)
     }
+  end
+
+  # Load person data
+  def self.load_people(data)
+    @all_people = data.map do |person_data|
+      id = person_data[:id]
+      name = person_data[:name]
+      age = person_data[:age]
+      parent_permission = person_data[:parent_permission]
+      person = Person.new(age, name, parent_permission: parent_permission)
+      person.instance_variable_set(:@id, id)
+
+      if person_data[:rentals_list]
+        person_data[:rentals_list].each do |rental_data|
+          date = rental_data[:date]
+          book_data = rental_data[:book]
+          book = Book.book_list.find { |b| b.title == book_data[:title] && b.author == book_data[:author] } if book_data
+          if book
+            Rental.new(date, book, person)
+          else
+            puts "Unable to find book #{book_data[:title]} by #{book_data[:author]} for rental by person #{name} (ID: #{id}). Skipping rental." if book_data
+          end
+        end
+      end
+      person
+    end
   end
 
   private
