@@ -2,6 +2,8 @@ require_relative 'person'
 
 class Teacher < Person
   @teachers_list = []
+  attr_accessor :specialization
+
   def initialize(specialization, age, name = 'unknown', parent_permission: true, label: 'Teacher')
     super(age, name, parent_permission: parent_permission, label: label)
     @specialization = specialization
