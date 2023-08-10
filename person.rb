@@ -5,19 +5,25 @@ require_relative 'rental_behaviors'
 class Person < Nameable
   include RentalBehaviors
   attr_accessor :name, :age, :rentals_list
-  attr_reader :id
+  attr_reader :id, :label
 
   @all_people = []
 
-  def initialize(age, name = 'unknown', parent_permission: true)
+  def initialize(age, name = 'unknown', parent_permission: true, label: 'person')
     super(name)
     @id = rand(1..1000)
     @name = name
     @age = age
     @parent_permission = parent_permission
+    @label = label
     @rentals_list = []
 
     self.class.all_people << self
+  end
+
+  # find a person by ID
+  def self.find_by_id(id)
+    all_people.find { |person| person.id == id }
   end
 
   def correct_name()
@@ -35,6 +41,71 @@ class Person < Nameable
 
   def self.all_people
     @all_people ||= []
+  end
+
+  class << self
+    attr_reader :label
+  end
+
+  def to_h
+    {
+      id: @id,
+      name: @name,
+      age: @age,
+      parent_permission: @parent_permission,
+      label: @label,
+      rentals_list: rentals_list.map(&:to_h_without_related)
+    }
+  end
+
+  # Load person data
+  def self.load_people(data)
+    @all_people = data.map do |person_data|
+      load_person(person_data)
+    end
+  end
+
+  def self.load_person(person_data)
+    id = person_data[:id]
+    name = person_data[:name]
+    age = person_data[:age]
+    parent_permission = person_data[:parent_permission]
+    label = person_data[:label]
+    person = create_person(id, name, age, parent_permission, label)
+
+    load_rentals(person, person_data[:rentals_list])
+
+    person
+  end
+
+  def self.create_person(id, name, age, parent_permission, label)
+    person = Person.new(age, name, parent_permission: parent_permission, label: label)
+    person.instance_variable_set(:@id, id)
+    person
+  end
+
+  def self.load_rentals(person, rentals_data)
+    rentals_data&.each do |rental_data|
+      load_rental(person, rental_data)
+    end
+  end
+
+  def self.load_rental(person, rental_data)
+    date = rental_data[:date]
+    book_data = rental_data[:book]
+    book = find_book(book_data)
+
+    return unless book
+
+    Rental.new(date, book, person)
+  end
+
+  def self.find_book(book_data)
+    return unless book_data
+
+    Book.book_list.find do |book|
+      book.title == book_data[:title] && book.author == book_data[:author]
+    end
   end
 
   private
