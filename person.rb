@@ -46,8 +46,8 @@ class Person < Nameable
     @all_people ||= []
   end
 
-  def self.label
-    @label
+  class << self
+    attr_reader :label
   end
 
   def to_h
