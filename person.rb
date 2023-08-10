@@ -5,17 +5,18 @@ require_relative 'rental_behaviors'
 class Person < Nameable
   include RentalBehaviors
   attr_accessor :name, :age, :rentals_list
-  attr_reader :id
+  attr_reader :id, :label
 
   # Instance variable to store all instances of Person
   @all_people = []
 
-  def initialize(age, name = 'unknown', parent_permission: true)
+  def initialize(age, name = 'unknown', parent_permission: true, label: 'person')
     super(name)
     @id = rand(1..1000)
     @name = name
     @age = age
     @parent_permission = parent_permission
+    @label = label
     @rentals_list = []
 
     # Add the current instance to the all_people array
@@ -45,12 +46,17 @@ class Person < Nameable
     @all_people ||= []
   end
 
+  def self.label
+    @label
+  end
+
   def to_h
     {
       id: @id,
       name: @name,
       age: @age,
       parent_permission: @parent_permission,
+      label: @label,
       rentals_list: rentals_list.map(&:to_h_without_related)
     }
   end
@@ -67,15 +73,16 @@ class Person < Nameable
     name = person_data[:name]
     age = person_data[:age]
     parent_permission = person_data[:parent_permission]
-    person = create_person(id, name, age, parent_permission)
+    label = person_data[:label]
+    person = create_person(id, name, age, parent_permission, label)
 
     load_rentals(person, person_data[:rentals_list])
 
     person
   end
 
-  def self.create_person(id, name, age, parent_permission)
-    person = Person.new(age, name, parent_permission: parent_permission)
+  def self.create_person(id, name, age, parent_permission, label)
+    person = Person.new(age, name, parent_permission: parent_permission, label: label)
     person.instance_variable_set(:@id, id)
     person
   end

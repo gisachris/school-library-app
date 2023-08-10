@@ -2,8 +2,8 @@ require_relative 'person'
 
 class Teacher < Person
   @teachers_list = []
-  def initialize(specialization, age, name = 'unknown', parent_permission: true)
-    super(age, name, parent_permission: parent_permission)
+  def initialize(specialization, age, name = 'unknown', parent_permission: true, label: 'Teacher')
+    super(age, name, parent_permission: parent_permission, label: label)
     @specialization = specialization
     self.class.teachers_list << self
     Person.all_people << self

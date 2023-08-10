@@ -16,15 +16,10 @@ end
 
 def list_all_people
   all_people = Person.all_people
-  all_students = Student.student_list
   puts 'No Participant Entries made Yet.' if all_people.empty?
   i = 0
   all_people.each do |person|
-    if all_students.include?(person)
-      puts "#{i}) [student] Name:#{person.name}, ID:#{person.id}, Age:#{person.age}"
-    else
-      puts "#{i}) [teacher] Name:#{person.name}, ID:#{person.id}, Age:#{person.age}"
-    end
+    puts "#{i}) [#{person.label}] Name:#{person.name}, ID:#{person.id}, Age:#{person.age}"
     i += 1
   end
 end
