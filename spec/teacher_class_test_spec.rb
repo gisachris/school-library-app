@@ -1,7 +1,8 @@
 require_relative '../teacher'
+require 'rspec'
 
 describe Teacher do
-    context "Running Tests On Teacher Class And Methods" do
+    context "Running Tests On Teacher Class And Its Methods" do
         before(:each) do
             @teacher = Teacher.new('Doctor', 45, 'ben Simmons')
         end
