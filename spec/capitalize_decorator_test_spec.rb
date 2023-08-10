@@ -9,7 +9,6 @@ class MockNameable
   end
 end
 
-
 describe CapitalizeDecorator do
   context 'Running Tests On CapitalizeDecorator Class And Its Methods' do
     let(:nameable) { MockNameable.new('dummy text') }
