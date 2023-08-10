@@ -14,7 +14,6 @@ RSpec.describe Person do
     end
   end
 
-
   describe '#correct_name' do
     it 'returns the correct name of the person' do
       person = create_sample_person
