@@ -5,9 +5,7 @@ class MockNameable
     @correct_name = correct_name
   end
 
-  def correct_name
-    @correct_name
-  end
+  attr_reader :correct_name
 end
 
 RSpec.describe BaseDecorator do
